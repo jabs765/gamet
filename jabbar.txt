@@ -1,2 +1,4 @@
 s is my first file
 hjdjkkkjKJCk
+a=10
+b=20
