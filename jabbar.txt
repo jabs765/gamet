@@ -1,4 +1,6 @@
 s is my first file
 hjdjkkkjKJCk
-a=40
+ HEAD
+a=35
+ dev-1.2.3
 b=20
