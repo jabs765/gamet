@@ -1,4 +1,4 @@
 s is my first file
 hjdjkkkjKJCk
-a=10
+a=40
 b=20
