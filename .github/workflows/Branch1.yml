@@ -1,0 +1,21 @@
+name: Create Branch with Git
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Create and push branch
+        run: |
+          git checkout -b new-feature-branch
+          git push origin new-feature-branch
