@@ -9,16 +9,16 @@ on:
       SOURCE_BRANCH:
         required: true
         description: source branch name
-       TARGET_BRANCH:
+      TARGET_BRANCH:
         required: true
         discription: target branch name
       SOURCE_VERSION:
         required: true
         description: source value to update in pom file
-       TRAGET_VERSION:
+      TARGET_VERSION:
          required: true
          description: target value to update in pom file
-       COMMIT_NUMBER:
+      COMMIT_NUMBER:
          default: "HEAD"
          required: true
          description: SHA value or default HEAD 
