@@ -18,7 +18,7 @@ on:
       TARGET_VERSION:
          required: true
          description: target value to update in pom file
-      COMMIT_NUMBER:
+      Commit_Number:
          default: "HEAD"
          required: true
          description: SHA value or default HEAD 
