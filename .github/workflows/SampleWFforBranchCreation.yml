@@ -30,6 +30,9 @@ on:
          id-token: write
          contents: read
        steps:
+         - name: Checkout repository
+           uses: actions/checkout@v4
+
          - name: Check if branch exists
            run: |
              # set up variables
