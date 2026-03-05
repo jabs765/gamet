@@ -1,4 +1,4 @@
-name: Branch creation and pom updation
+name: Newbranchcreation
 
 on:
   workflow_dispatch:
