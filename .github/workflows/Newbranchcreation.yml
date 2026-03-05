@@ -24,7 +24,7 @@ on:
          description: SHA value or default HEAD 
 
   jobs:
-     Creating_new_branch:
+    Creating_new_branch:
        runs-on: ubuntu-latest
        permissions:
          id-token: write
