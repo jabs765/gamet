@@ -1,0 +1,103 @@
+name: Branch creation and pom updation
+
+on:
+  workflow_dispatch:
+    inputs:
+      REPO_NAME:
+        required: true
+        description: repo name
+      SOURCE_BRANCH:
+        required: true
+        description: source branch name
+      TARGET_BRANCH:
+        required: true
+        discription: target branch name
+      SOURCE_VERSION:
+        required: true
+        description: source value to update in pom file
+      TARGET_VERSION:
+         required: true
+         description: target value to update in pom file
+      Commit_Number:
+         default: "HEAD"
+         required: true
+         description: SHA value or default HEAD 
+
+  jobs:
+     Creating_new_branch:
+       runs-on: ubuntu-latest
+       permissions:
+         id-token: write
+         contents: read
+       steps:
+         - name: Check if branch exists
+           run: |
+             # set up variables
+             REPO_NAME=${{ inputs.REPO_NAME }}
+             SOURCE_BRANCH=${{ inputs.SOURCE_BRANCH }}
+             TARGET_BRANCH=${{ inputs.TARGET_BRANCH }}
+             SOURCE_VERSION=${{ inputs.SOURCE_VERSION }}
+             TARGET_VERSION=${{ inputs.TARGET_VERSION }}
+             COMMIT_NUMBER=${{ inputs.Commit_Number }}
+
+             # Create a directory for the branch creation
+             mkdir Branch_creation
+             cd Branch_creation
+
+             #Check if the traget branch already exists
+             echo "Checking if branch $TARGET_BRANCH exists..."
+             if git ls-remote --heads "https://github.com/jabs765/gamet.git" $TARGET_BRANCH | grep -q $TARGET_BRANCH; then
+               echo "error: Branch $TRAGET_BRANCH alredy exists. Please discard the existing one or create with a diffent name"
+               exit 1
+             else
+               echo "Branch $TARGET_BRANCH doesn't exist. proceeding with branch creation..."
+             fi
+
+             # clone the repository and checkout the source branch
+             echo "Cloning repository and checking out source $SOURCE_BRANCH..."
+             git clone "https://github.com/jabs765/gamet.git" --single-branch --branch=$SOURCE_BRANCH
+             cd $REPO_NAME
+             ls -l
+
+             # Checkout the target branch
+             if [ "$COMMIT_NUMBER" = "HEAD" ]; THEN
+               echo "Checking out source code from the latest revision..."
+               git checkout -b $TARGET_BRANCH
+             else
+               echo "Checking out source code from  revision $COMMIT_NUMBER..."
+               git checkout -b $TARGET_BRANCH $COMMIT_NUMBER
+             fi
+
+             # Push the newly created branch to the remote repository
+             echo "Pushing the newly created branch $TARGET_BRANCH to the remote repository..."
+             git config --local user.name "jabbar"
+             git config --local user.email "jabs.sk2024@gmail.com"
+             git push -u origin $TARGET_BRANCH
+
+             #Check if the branch was created successfully
+             echo "Checking if branch $TARGET _BRANCH was created successfully..."
+             if git ls-remote --heads "https://github.com/jabs765/gamet.git" $TARGET_BRANCH | grep -q $TARGET_BRANCH; then
+                echo "Branch $TARGET _BRANCH was created successfully..."
+                echo "Updating pom files and committing code..."
+
+                # Update pom files
+                find . -name pom.xml | xargs sed -i "s/${SOURCE_VERSION}/{$TARGET_VERSION}/g"
+                git status
+
+                if git diff --quiet; then
+                echo "No changes detected. skipping commit."
+             else
+               echo "Changes detected. committing updated files."
+               git add -u
+               git commit -m "Updated pom files to version $TARGET_VERSION"
+               git push -u origin $TARGET_BRANCH
+             fi
+             else
+               echo "Error": Branch $TARGET_BRANCH was not created successfully."
+               exit 3
+             fi
+             
+       - name: Clear work space
+          run: |
+          # Remove all files and directories in the workspace
+          rm -rf *
