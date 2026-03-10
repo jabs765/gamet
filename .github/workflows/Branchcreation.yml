@@ -1,5 +1,6 @@
 
 name: Branchcreation
+
 on:
   workflow_dispatch:
     inputs:
@@ -22,7 +23,7 @@ on:
          default: "HEAD"
          required: true
          description: SHA value or default HEAD 
-jobs:
+  jobs:
     Creating_new_branch:
        runs-on: ubuntu-latest
        permissions:
